@@ -20,8 +20,8 @@ class DownloadArchiveInTag(object):
         #窗口大小是否可变
         self.root.geometry("350x450")
         self.root.resizable(width=True, height=True)
+        
         # 创建输入框,并设置尺寸
-
         tag_name_input = tkinter.StringVar()
         tag_filter_input=tkinter.StringVar()        
         time_input = tkinter.StringVar()
@@ -30,12 +30,11 @@ class DownloadArchiveInTag(object):
         time_input.set("2018-12-01")
         hot_filter_input.set("300")
         self.tag_input = tkinter.Entry(self.root,textvariable=tag_name_input,width=30)
-        #self.tag_input.place(x=20,y=0)
         self.time_input = tkinter.Entry(self.root,textvariable=time_input,width=30)
-        #self.time_input.place(x=40,y=30)
         self.hot_filter_input = tkinter.Entry(self.root,textvariable=hot_filter_input,width=30)
         self.tag_filter_input = tkinter.Entry(self.root,textvariable=tag_filter_input,width=30,state="disabled")
         
+        #单选框
         self.down_check = tkinter.IntVar()
         self.down_check.set(0)
         self.download_check = tkinter.Checkbutton(self.root,text = "下载文章",variable=self.down_check, onvalue="1",offvalue="0")
@@ -44,17 +43,14 @@ class DownloadArchiveInTag(object):
         self.tag_filter_check = tkinter.Checkbutton(self.root,text = "屏蔽tag",variable=self.shield_check, onvalue="1",offvalue="0",command=self.check_shielding_input)
 
         # 创建一个回显列表
-        
         self.display_slider=tkinter.Scrollbar(self.root)
-        #self.display_slider.pack(side="right",fill="y")
         self.display_info = tkinter.Text(self.root,width=40,height=20,yscrollcommand=self.display_slider.set)
-        #self.display_info = tkinter.Listbox(self.root,width=self.root.winfo_width(),yscrollcommand=self.display_slider.set)
         self.display_slider.config(command=self.display_info.yview)
         # 创建一个查询结果的按钮
         self.result_button = tkinter.Button(self.root, command = self.download, text = "开始")
         
         
-
+    #控件布局
     def gui_arrang(self):
         tkinter.Label(self.root,text="请输入tag").grid(row=0,column=0,stick="w")
         tkinter.Label(self.root,text="搜索截止日期").grid(row=1,column=0,stick="w")
@@ -66,10 +62,10 @@ class DownloadArchiveInTag(object):
         self.tag_filter_input.grid(row=3,column=1,stick="w")
         self.download_check.grid(row=4,column=1,stick="w")
         self.display_info.grid(row =5,column=0,columnspan=2)
-        #self.display_slider["command"] = self.display_info.yview
-        self.display_slider.grid(row = 5,column =2,sticky="N"+"S")#.(side="right",fill="y")
+        self.display_slider.grid(row = 5,column =2,sticky="N"+"S")
         self.result_button.grid(row=6,column=1)
 
+    #单选框对应输入框的选用和禁用
     def check_shielding_input(self):
         if self.shield_check.get()==1:
             self.tag_filter_input.config(state="normal")
@@ -91,7 +87,8 @@ class DownloadArchiveInTag(object):
             with open("fail_to_download.csv","a+",encoding="utf-8") as csv_file2:
                 writer2 = csv.writer(csv_file2)
                 writer2.writerow([title,author])
-                
+    
+    #避免标题无法写入            
     def manage_title(self,title):
         if "/" in title:
             titles = title.split('/')
@@ -107,6 +104,7 @@ class DownloadArchiveInTag(object):
                 title += "-"
         return title
 
+    #访问网页提交的表单
     def create_query_data(self,tag_lofter,i,timestamp_now):
         data = {'callCount':'1',
                 'scriptSessionId':'${scriptSessionId}187',
@@ -128,6 +126,7 @@ class DownloadArchiveInTag(object):
 
     def download(self):
         self.result_button.config(text="运行中")
+        #检查输入日期格式
         pattern_date= re.compile("20\d{2}-[0-1]\d-\d{2}")
         result = re.match(pattern_date,self.time_input.get())
         if result == None:

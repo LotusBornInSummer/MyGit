@@ -1,12 +1,9 @@
 import tkinter
-from tkinter import messagebox
 import csv
 import re
 import os
 from bs4 import BeautifulSoup
 import requests
-import time
-import random
 
 
 class DownloadArchiveInTag(object):

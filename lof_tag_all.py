@@ -39,8 +39,6 @@ class DownloadArchiveInTag(object):
         self.down_check = tkinter.IntVar()
         self.down_check.set(0)
         self.download_check = tkinter.Checkbutton(self.root,text = "下载文章",variable=self.down_check, onvalue="1",offvalue="0")
-        #photo = tkinter.PhotoImage(file=".jpg")
-        #theLabel = tkinter.Label(self.root,text="",justify=self.root.Left,image=photo)
         self.shield_check = tkinter.IntVar()
         self.shield_check.set(0)
         self.tag_filter_check = tkinter.Checkbutton(self.root,text = "屏蔽tag",variable=self.shield_check, onvalue="1",offvalue="0",command=self.check_shielding_input)
@@ -151,13 +149,6 @@ class DownloadArchiveInTag(object):
             tag_page = round(int(tag_num[0])/20)
 
         hot_filter = int(self.hot_filter_input.get())
-
-
-        #with open(file_name, 'a',encoding='utf-8',newline='') as file_open:
-        #    writer = csv.writer(file_open)
-
-
-        #    writer.writerow(["title","addr","blogname","blogid","hot","text"])
         
         time_stamp = time.mktime(time.strptime('%s 00:00:00'%self.time_input.get(), '%Y-%m-%d %H:%M:%S'))
         url_res = "http://www.lofter.com/dwr/call/plaincall/TagBean.search.dwr"
@@ -168,7 +159,6 @@ class DownloadArchiveInTag(object):
                 "Connection": "keep-alive",
                 "Content-Length": "245",
                 "Content-Type": "text/plain",
-                "Cookie":"html5uploadfailcountkey=-1; noAdvancedBrowser=0; _ga=GA1.2.1167147232.1422534223; usertrack=ezq0plqpHkUhneWSCsWsAg==; _ntes_nnid=02839b8d5d821ed9549b16efd119581e,1521032776189; reglogin_hasopened=1; neplayer_device_id=15296722644378375124535; nocard=3%7C1530761767557; gdxidpyhxdE=lsUzR4v5%2BGMOf90UQCcCQp1IDT596gXX3fpfUlQemTO3KzxA9JMVV1EjrndrL1H6jLoQYqmBV%2F7%2BkLuA4wOTM3oV0SUohfdtIhZ1MGuS%2BxpyylAHoTx5bEk%2FG%2Fn6QCzwuXHxsGIyaoQ%5CL7DhZigtlGO%2Fv7pCQ5vmQMyLK07jt6yOx3DH%3A1532713117894; _9755xjdesxxd_=32; P_INFO=lordlotus@126.com|1534677370|2|mail126|00&99|shh&1533687102&mail126#jis&320400#10#0#0|151392&0|mail126|lordlotus@126.com; razor_sign_js_cookie=f16592f9038d5cd8cac1828ff3ffc962; razor_1_0_1_sign_js_cookie=2c3ba79066b9eaf9817d95e53f988b09; isforbidshare4post=0; JSESSIONID-WLF-XXD=3994db8214563684003088d65cba964a097dc9d8fae0b965dd5a0b7d6f0dbb6363219dba1d5a76425b30198f1386e51bc22c5b4c3b4b23d814e3617eb91e211ba472d12fa719b184d31ef1145ab62f797d584c0403f64d872a1d7106c0123ab8730984e2e097c6983d0b8246a8d8c6371003892418ddf65f46dd6915312bceafd52366de; __utmc=61349937; fastestuploadproxydomainkey=upload|1543201334539; __utmz=61349937.1543221325.550.61.utmcsr=lofter.com|utmccn=(referral)|utmcmd=referral|utmcct=/like; hb_MA-BFD7-963BF6846668_source=archiveoflinda2015.lofter.com; firstentry=%2FtagSearch.do%3Ftype%3D0%26X-From-ISP%3D1%26tab%3Darchive%26tag%3Dggad|; _gid=GA1.2.916419880.1543452336; __utma=61349937.1167147232.1422534223.1543221325.1543452336.551; LOFT_SESSION_ID=E4rZo7UOWglt5zWQBrsFRevqA1WHALat; regtoken=1000; _gat=1; mp_MA-BFD7-963BF6846668_hubble=%7B%22sessionReferrer%22%3A%20%22%22%2C%22updatedTime%22%3A%201543453834563%2C%22sessionStartTime%22%3A%201543452335753%2C%22sendNumClass%22%3A%20%7B%22allNum%22%3A%208%2C%22errSendNum%22%3A%200%7D%2C%22deviceUdid%22%3A%20%22c6a5a196-0c57-48da-b37c-30f419ba902e%22%2C%22persistedTime%22%3A%201541488666301%2C%22LASTEVENT%22%3A%20%7B%22eventId%22%3A%20%22da_u_logout%22%2C%22time%22%3A%201543453834564%7D%2C%22sessionUuid%22%3A%20%2216bd4259-af3a-44d1-87ee-215d3848f67c%22%7D; __utmb=61349937.12.9.1543453835293; NTESwebSI=C6A030FF30F399E1C407FF0E5A9A0358.hzayq-lofter-web7.server.163.org-8010",
                 "Host": "www.lofter.com",
                 "Origin": "http://www.lofter.com",
                 "Referer": "http://www.lofter.com/tag/ggad?tab=archive",
@@ -183,14 +173,11 @@ class DownloadArchiveInTag(object):
                 time_pattern = re.compile('s\d*?\.publishTime=(\d*);' )
                 timestamp = re.findall(time_pattern,res.text)                
                 if (int(timestamp[-1])<1000*time_stamp):
-                    #hot_filter = 200
                     self.result_button.config(text="开始")
                     return 0
                 data["c0-param7"]='number:%d'%(20*i)
                 data["c0-param8"]='number:%s'%timestamp[-1]
-            time3 = time.time()
             res = requests.post(url_res,data=data,headers=headers)
-            time4 = time.time()
             res.encoding = "unicode_escape"
             title_pattern = re.compile('''s(\d*).title=\"(.*?)\";''')
             title = re.findall(title_pattern,res.text)
@@ -230,21 +217,10 @@ class DownloadArchiveInTag(object):
                                 blogid = re.findall(blogid_pattern,res.text)
                                 blognickname_pattern = re.compile('''s\d*.blogId=%s;.*?blogNickName=\"(.*?)\";'''%blogid[0])
                                 blognickname = re.findall(blognickname_pattern,res.text)
-                                #text = '<p><a href="'+url[0]+'" target="_blank">'+title+'</a> '+'[热度：%s]'%hot[0]+'by <a href="'+blogurl+'" target="_blank">'+blognickname[0]+'</a> <br /></p>'
-
                                 self.display_info.insert('end',"%s [热度：%s]\n%s\n"%(title,hot[0],url[0]))
-                                #self.display_info.insert('end',"%s \n%s\n"%(title,url[0]))
                                 if self.down_check.get() ==1:
                                     self.download_archive(title,blognickname[0],url[0],archive_towrite)
 
-                                #with open(file_name, 'a',encoding='utf-8',newline='') as file_open:
-                                    #writer = csv.writer(file_open,quotechar=' ')
-                                    #try:
-                                     #   writer.writerow([title,url[0],blognickname[0],blogid[0],hot[0],text])
-                                    #except UnicodeEncodeError:
-                                     #   print("error%s\n\n"%url[0])
-            time2 = time.time()
-            print(time2-time1-time4+time3)
         self.result_button.config(text="开始")
         return 0
 

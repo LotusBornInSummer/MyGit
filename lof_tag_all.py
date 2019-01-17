@@ -4,7 +4,7 @@ import re
 import os
 from bs4 import BeautifulSoup
 import requests
-
+import time
 
 class DownloadArchiveInTag(object):
     def __init__(self):
